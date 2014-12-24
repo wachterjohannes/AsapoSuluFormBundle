@@ -8,9 +8,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ * {@inheritdoc}
  */
 class AsapoSuluFormExtension extends Extension
 {
@@ -21,6 +19,8 @@ class AsapoSuluFormExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('asapo_sulu_form.forms', $config['forms']);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
