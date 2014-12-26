@@ -5,6 +5,7 @@
 
     <parameters>
         <parameter key="asapo_sulu_form.admin.class">Asapo\Bundle\Sulu\FormBundle\Admin\AsapoSuluFormAdmin</parameter>
+        <parameter key="asapo_sulu_form.form_entry_manager.class">Asapo\Bundle\Sulu\FormBundle\FormEntryManager\FormEntryManager</parameter>
     </parameters>
 
     <services>
@@ -12,6 +13,11 @@
             <argument type="string">%sulu_admin.name%</argument>
 
             <tag name="sulu.admin"/>
+        </service>
+
+        <service id="asapo_sulu_form.form_entry_manager" class="%asapo_sulu_form.form_entry_manager.class%">
+            <argument type="service" id="doctrine"/>
+            <argument>%asapo_sulu_form.forms%</argument>
         </service>
     </services>
 </container>

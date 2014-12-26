@@ -18,11 +18,20 @@ class AsapoSuluFormAdmin extends Admin
         $section->addChild($dropDown);
 
         $contactItem = new NavigationItem('Kontakt');
-        $contactItem->setAction('intern/contact');
+        $contactItem->setAction('form/contact');
         $dropDown->addChild($contactItem);
 
         $rootNavigationItem->addChild($section);
 
         $this->setNavigation(new Navigation($rootNavigationItem));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getJsBundleName()
+    {
+        return 'asaposuluform';
+    }
+
 }

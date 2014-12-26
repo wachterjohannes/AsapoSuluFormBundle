@@ -52,4 +52,32 @@ abstract class FormEntry implements FormEntryInterface
     {
         return $this->modified;
     }
+    /**
+     * @var string
+     */
+    private $clientIp;
+
+
+    /**
+     * Set clientIp
+     *
+     * @param string $clientIp
+     * @return FormEntry
+     */
+    public function setClientIp($clientIp)
+    {
+        $this->clientIp = $clientIp;
+
+        return $this;
+    }
+
+    /**
+     * Get clientIp
+     *
+     * @return string 
+     */
+    public function getClientIp()
+    {
+        return $this->clientIp;
+    }
 }
