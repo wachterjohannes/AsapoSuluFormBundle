@@ -16,17 +16,17 @@ class FormController extends Controller
 {
     /**
      * Renders and handles forms
-     * @param string $name
+     * @param string $formName
      * @param array $content
      * @param array $view
      * @return Response
      */
-    public function renderAction($name, $content, $view)
+    public function renderAction($formName, $content, $view)
     {
         // get parameter from container
         $requestStack = $this->get('request_stack');
         $eventDispatcher = $this->get('event_dispatcher');
-        $formsConfig = $this->container->getParameter('asapo_sulu_form.forms')[$name];
+        $formsConfig = $this->container->getParameter('asapo_sulu_form.forms')[$formName];
 
         // init request and response
         $request = $requestStack->getMasterRequest();
@@ -34,7 +34,7 @@ class FormController extends Controller
 
         // entity and form init
         $entity = $this->createEntity($formsConfig['entity']);
-        $formType = $this->get($formsConfig['type']);
+        $formType = $this->get($formsConfig['form_type']);
         $form = $this->createForm($formType, $entity);
 
         // handle request
@@ -42,15 +42,18 @@ class FormController extends Controller
 
         // validate request
         if ($form->isValid()) {
+            // set default vars
             $entity->setCreated(new \DateTime());
+            $entity->setModified(new \DateTime());
+            $entity->setClientIp($request->getClientIp());
 
             // dispatch events
             $eventArgs = new FormEventArgs($entity);
             $eventDispatcher->dispatch(FormEvents::CONTACT_FORM_SUCCESS, $eventArgs);
-            $eventDispatcher->dispatch(FormEvents::getSuccessEventName($name), $eventArgs);
+            $eventDispatcher->dispatch(FormEvents::getSuccessEventName($formName), $eventArgs);
 
             return $this->render(
-                $formsConfig['success_template'],
+                $formsConfig['templates']['success'],
                 array(
                     'content' => $content,
                     'view' => $view
@@ -60,7 +63,7 @@ class FormController extends Controller
         }
 
         return $this->render(
-            $formsConfig['form_template'],
+            $formsConfig['templates']['form'],
             array(
                 'form' => $form->createView(),
                 'content' => $content,
@@ -80,7 +83,7 @@ class FormController extends Controller
         $em = $this->getEntityManager();
         $entityInfo = $em->getClassMetadata($entityName);
 
-        return new $entityInfo->getName();
+        return new $entityInfo->name;
     }
 
     /**

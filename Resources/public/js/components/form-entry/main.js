@@ -38,7 +38,7 @@ define([
             // navigate to edit contact
             this.sandbox.on('husky.datagrid.item.click', function(item) {
                 this.sandbox.emit(
-                    'sulu.sidebar.set-widget', '/admin/widget-groups/form-entry-' + this.options.entityName + '?entry=' + item
+                    'sulu.sidebar.set-widget', '/admin/widget-groups/form-entry-' + this.options.formName + '?entry=' + item
                 );
             }, this);
 
@@ -56,8 +56,8 @@ define([
 
             // init list-toolbar and datagrid
             this.sandbox.sulu.initListToolbarAndList.call(this,
-                'formFiels' + this.options.entityName,
-                '/admin/api/forms/' + this.options.entityName + '/entry/fields',
+                'formFiels' + this.options.formName,
+                '/admin/api/forms/' + this.options.formName + '/entry/fields',
                 {
                     el: this.$find('#list-toolbar-container'),
                     instanceName: 'contactentries',
@@ -92,8 +92,9 @@ define([
                 },
                 {
                     el: $list,
-                    url: '/admin/api/forms/' + this.options.entityName + '/entries',
+                    url: '/admin/api/forms/' + this.options.formName + '/entries',
                     searchInstanceName: 'formentries',
+                    // TODO search-fields
                     searchFields: ['???'],
                     resultKey: 'entries',
                     viewOptions: {

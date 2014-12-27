@@ -1,7 +1,6 @@
 require.config({
     paths: {
-        asaposuluform: '../../asaposuluform/js',
-        "type/client-select": '../../asaposuluform/js/validation/types/client-select'
+        asaposuluform: '../../asaposuluform/js'
     }
 });
 
@@ -16,10 +15,10 @@ define({
         app.components.addSource('asaposuluform', '/bundles/asaposuluform/js/components');
 
         app.sandbox.mvc.routes.push({
-            route: 'form/:entityName',
-            callback: function(entityName) {
+            route: 'form/:formName',
+            callback: function(formName) {
                 this.html(
-                    '<div data-aura-component="form-entry@asaposuluform" data-aura-entity-name="' + entityName + '"/>'
+                    '<div data-aura-component="form-entry@asaposuluform" data-aura-form-name="' + formName + '"/>'
                 );
             }
         });
