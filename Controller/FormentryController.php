@@ -17,7 +17,7 @@ class FormEntryController extends RestController implements ClassResourceInterfa
     public function fieldsAction($formName)
     {
         $formManager = $this->get('asapo_sulu_form.form_entry_manager');
-        $fieldDescriptors = $formManager->getFieldDescriptors($formName);
+        $fieldDescriptors = $formManager->getFieldDescriptors($formName, $this->getUser()->getLocale());
 
         return $this->handleView($this->view(array_values($fieldDescriptors), 200));
     }
@@ -39,7 +39,10 @@ class FormEntryController extends RestController implements ClassResourceInterfa
         $entityName = $formManager->getEntityName($formName);
 
         $listBuilder = $factory->create($entityName);
-        $restHelper->initializeListBuilder($listBuilder, $formManager->getFieldDescriptors($formName));
+        $restHelper->initializeListBuilder(
+            $listBuilder,
+            $formManager->getFieldDescriptors($formName, $this->getUser()->getLocale())
+        );
 
         $list = new ListRepresentation(
             $listBuilder->execute(),

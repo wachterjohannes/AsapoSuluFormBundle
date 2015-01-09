@@ -15,6 +15,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
+
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('asapo_sulu_form');
 
@@ -27,6 +28,23 @@ class Configuration implements ConfigurationInterface
                                 ->children()
                                     ->arrayNode('title')
                                         ->prototype('scalar')->end()
+                                    ->end()
+                                    ->arrayNode('field_descriptors')
+                                        ->prototype('array')
+                                            ->canBeEnabled()
+                                            ->children()
+                                                ->arrayNode('title')
+                                                    ->prototype('scalar')->end()
+                                                ->end()
+                                                ->scalarNode('disabled')->defaultValue(false)->end()
+                                                ->scalarNode('default')->defaultValue(false)->end()
+                                                ->scalarNode('type')->defaultValue('')->end()
+                                                ->scalarNode('width')->defaultValue('')->end()
+                                                ->scalarNode('minWidth')->defaultValue('')->end()
+                                                ->scalarNode('sortable')->defaultValue(true)->end()
+                                                ->scalarNode('editable')->defaultValue(false)->end()
+                                            ->end()
+                                        ->end()
                                     ->end()
                                 ->end()
                             ->end()

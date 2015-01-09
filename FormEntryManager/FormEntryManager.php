@@ -32,7 +32,7 @@ class FormEntryManager
      * @return AbstractFieldDescriptor[]
      * @throws \Doctrine\ORM\Mapping\MappingException
      */
-    public function getFieldDescriptors($formName)
+    public function getFieldDescriptors($formName, $locale)
     {
         $formConfig = $this->formsConfig[$formName];
         $entityName = $formConfig['entity'];
@@ -42,26 +42,83 @@ class FormEntryManager
 
         $fieldDescriptors = array();
         foreach ($metadata->getFieldNames() as $fieldName) {
-            $fieldMapping = $metadata->getFieldMapping($fieldName);
-            $type = ''; // default
-            if ($fieldMapping['type'] === 'datetime') {
-                $type = 'date';
+            $config = null;
+            if (
+                array_key_exists('backend', $formConfig) &&
+                array_key_exists('field_descriptors', $formConfig['backend']) &&
+                array_key_exists($fieldName, $formConfig['backend']['field_descriptors'])
+            ) {
+                $config = $formConfig['backend']['field_descriptors'][$fieldName];
             }
 
-            // TODO config of name, translation, disabled, default, type, width, minWidth, sortable and editable
-            $fieldDescriptors[$fieldName] = new DoctrineFieldDescriptor(
-                $fieldName,
-                $fieldName,
-                $entityName,
-                ucfirst($fieldName),
-                array(),
-                false,
-                false,
-                $type
-            );
+            if ($config['enabled'] !== false) {
+                $fieldDescriptors[$fieldName] = $this->getFieldDescriptor(
+                    $fieldName,
+                    $metadata,
+                    $entityName,
+                    $locale,
+                    $config
+                );
+            }
         }
 
         return $fieldDescriptors;
+    }
+
+    private function getFieldDescriptor($fieldName, ClassMetadata $metadata, $entityName, $locale, $config = null)
+    {
+        $fieldMapping = $metadata->getFieldMapping($fieldName);
+        $type = ''; // default
+        if ($fieldMapping['type'] === 'datetime') {
+            $type = 'date';
+        }
+        $config = $this->extendConfig($config);
+
+        // TODO config of disabled, default, type, width, minWidth, sortable and editable
+        return new DoctrineFieldDescriptor(
+            $fieldName,
+            $fieldName,
+            $entityName,
+            $this->getTitle($fieldName, $locale, $config),
+            array(),
+            $config['disabled'],
+            $config['default'],
+            $config['type'] !== '' ? $config['type'] : $type,
+            $config['width'],
+            $config['minWidth'],
+            $config['sortable'],
+            $config['editable']
+        );
+    }
+
+    private function extendConfig($config)
+    {
+        if ($config === null) {
+            $config = array();
+        }
+
+        return array_merge(
+            array(
+                'title' => array(),
+                'disabled' => false,
+                'default' => false,
+                'type' => '',
+                'width' => '',
+                'minWidth' => '',
+                'sortable' => true,
+                'editable' => false,
+            ),
+            $config
+        );
+    }
+
+    private function getTitle($fieldName, $locale, $config = null)
+    {
+        if ($config !== null && array_key_exists($locale, $config['title'])) {
+            return $config['title'][$locale];
+        }
+
+        return ucfirst($fieldName);
     }
 
     /**
