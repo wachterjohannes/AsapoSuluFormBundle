@@ -24,7 +24,6 @@ class AsapoSuluFormAdmin extends Admin
         $section = new NavigationItem('');
         $dropDown = new NavigationItem('asapo.form.navigation.section');
         $dropDown->setIcon('mail-forward');
-        $section->addChild($dropDown);
 
         $user = $this->getUser();
         $userLocale = $user->getLocale();
@@ -36,10 +35,21 @@ class AsapoSuluFormAdmin extends Admin
             }
         }
 
-        $rootNavigationItem->addChild($section);
+        if(sizeof($dropDown->getChildren()) > 0) {
+            $section->addChild($dropDown);
+            $rootNavigationItem->addChild($section);
+        }
+
         $this->setNavigation(new Navigation($rootNavigationItem));
     }
 
+    /**
+     * Generate a navigation item for form
+     * @param string $formName
+     * @param array $form
+     * @param string $locale
+     * @return NavigationItem
+     */
     private function getItem($formName, $form, $locale)
     {
         $title = ucfirst($formName);
