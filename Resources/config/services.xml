@@ -11,6 +11,8 @@
     <services>
         <service id="asapo_sulu_form.admin" class="%asapo_sulu_form.admin.class%">
             <argument type="string">%sulu_admin.name%</argument>
+            <argument type="string">%asapo_sulu_form.forms%</argument>
+            <argument type="service" id="security.context"/>
 
             <tag name="sulu.admin"/>
         </service>
