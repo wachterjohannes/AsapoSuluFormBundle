@@ -1,0 +1,11 @@
+<ul>
+    {% for key, value in data.fieldDescriptors %}
+        <li>
+            {% if value.type == 'date' %}
+                {{ key|capitalize }}: {{ attribute(data.entry, key)|date('l jS \of F Y h:i:s A') }}
+            {% else %}
+                {{ key|capitalize }}: {{ attribute(data.entry, key) }}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

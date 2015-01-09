@@ -56,6 +56,7 @@ class Configuration implements ConfigurationInterface
                                 ->children()
                                     ->scalarNode('form')->defaultValue('AsapoSuluFormBundle:Form:form.html.twig')->end()
                                     ->scalarNode('success')->defaultValue('AsapoSuluFormBundle:Form:success.html.twig')->end()
+                                    ->scalarNode('details')->defaultValue('AsapoSuluFormBundle:Form:details.html.twig')->end()
                                 ->end()
                             ->end()
                         ->end()

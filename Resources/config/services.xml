@@ -6,6 +6,7 @@
     <parameters>
         <parameter key="asapo_sulu_form.admin.class">Asapo\Bundle\Sulu\FormBundle\Admin\AsapoSuluFormAdmin</parameter>
         <parameter key="asapo_sulu_form.form_entry_manager.class">Asapo\Bundle\Sulu\FormBundle\FormEntryManager\FormEntryManager</parameter>
+        <parameter key="asapo_sulu_form.form_entry.widget.class">Asapo\Bundle\Sulu\FormBundle\Widgets\FormEntryWidget</parameter>
     </parameters>
 
     <services>
@@ -20,6 +21,14 @@
         <service id="asapo_sulu_form.form_entry_manager" class="%asapo_sulu_form.form_entry_manager.class%">
             <argument type="service" id="doctrine"/>
             <argument>%asapo_sulu_form.forms%</argument>
+        </service>
+
+        <service id="asapo_sulu_form.form_entry.widget" class="%asapo_sulu_form.form_entry.widget.class%">
+            <argument type="service" id="doctrine"/>
+            <argument type="service" id="asapo_sulu_form.form_entry_manager"/>
+            <argument type="service" id="security.context"/>
+
+            <tag name="sulu.widget" alias="asapo-form-entry"/>
         </service>
     </services>
 </container>

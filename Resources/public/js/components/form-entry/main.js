@@ -38,7 +38,7 @@ define([
             // navigate to edit contact
             this.sandbox.on('husky.datagrid.item.click', function(item) {
                 this.sandbox.emit(
-                    'sulu.sidebar.set-widget', '/admin/widget-groups/form-entry-' + this.options.formName + '?entry=' + item
+                    'sulu.sidebar.set-widget', '/admin/widget-groups/asapo-form-entry?formName=' + this.options.formName + '&entry=' + item
                 );
             }, this);
 
